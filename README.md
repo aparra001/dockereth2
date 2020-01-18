@@ -1,34 +1,18 @@
 # Ethereum CUDA Miner
 
-
 ### Docker container for Ethereum mining with CUDA.
 
-Simple and easy to run, if you have a Nvidia GPU and want to mine eth.
+Simple and easy to run, if you have a Nvidia GPU and want to mine eth. Dockerfile updated for Ubuntu 18.04 LTS and CUDA version 10.
 
-**Note:** This image builds ethminer, which is an activily maintained Genoil fork <https://github.com/ethereum-mining/ethminer>
+**Note:** This image builds ethminer, which is an activily maintained Genoil fork <https://github.com/ethereum-mining/ethminer>. Version is 0.18.0.
 
 ### Requirements
 - Nvidia drivers for your GPU, you can get them here: [Nvidia drivers](http://www.nvidia.com/Download/index.aspx)
-- Nvidia-docker (so docker can access your GPU) install instructions here: [nvidia-docker](https://github.com/NVIDIA/nvidia-docker)
+- Nvidia-docker (so docker can access your GPU) install instructions here: [nvidia-docker](https://github.com/NVIDIA/nvidia-docker) OR docker's version 19.x or above that supports natively Nvidia GPUs. Remember to install `nvidia-container-tools` and `nvidia-container-runtime`, though.
 
 ### How to run
-```
-$ nvidia-docker run -it anthonytatowicz/eth-cuda-miner ARG1 ARG2 ...
 
-# Example
-$ nvidia-docker run -it anthonytatowicz/eth-cuda-miner \
--S us-west1.nanopool.org:9999 \
--O <your_wallet_address>.<worker_name>/<your_email>
-```
-
-**Note:** `-U` is set by default
-
-**Note:** Be sure to change the -O argument to your mining address and email.  
-The format goes like this "address.worker/email"
+See `run.example.sh` script.
 
 ### Help
-`$ etherminer --help`
-
-### Questions?
-You can leave a comment below or send an email to `ajtatowicz@gmail.com`.  
-If this helped and you'd like to leave a tip --> `0x20ad58fe023265577565c7eb44b55c31e7497c33`
+`$ ethminer --help`
