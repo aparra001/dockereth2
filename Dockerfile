@@ -34,4 +34,7 @@ ENV GPU_TEMP_START=50
 # in the container launch.
 CMD ["bash", "-c", "/usr/local/bin/ethminer -U --api-port ${ETHMINER_API_PORT} \
 --HWMON 2 --tstart ${GPU_TEMP_START} --tstop ${GPU_TEMP_STOP} --exit \
+-P stratums://$ETH_WALLET.$WORKER_NAME@eu1.ethermine.org:5555 \
+-P stratums://$ETH_WALLET.$WORKER_NAME@asia1.ethermine.org:5555 \
+-P stratums://$ETH_WALLET.$WORKER_NAME@us1.ethermine.org:5555 \
 -P stratums://$ETH_WALLET.$WORKER_NAME@us2.ethermine.org:5555"]
