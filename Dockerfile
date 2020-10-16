@@ -1,27 +1,13 @@
-FROM nvidia/driver:440.64.00-ubuntu18.04
+FROM nvidia/cuda:10.1-devel-ubuntu18.04
 
 WORKDIR /
 
-ADD \
-https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-ubuntu1804.pin \
-.
-
-ADD \
-https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub \
-.
-
-RUN \
-&& apt-get install gcc g++ build-essential libssl-dev automake linux-headers-$(uname -r) git gawk libcurl4-openssl-dev libjansson-dev xorg libc++-dev libgmp-dev python-dev -y
-mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600 \
-&& apt-get update \
-&& apt-key add 7fa2af80.pub \
-&& apt-get update \
-
+# Package and dependency setup
 RUN apt-get update \
     && apt-get -y install software-properties-common \
     && apt-get update \
     && apt-get install -y git cmake build-essential
-    
+
 # Git repo set up
 RUN git clone https://github.com/ethereum-mining/ethminer.git; \
     cd ethminer; \
