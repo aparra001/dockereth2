@@ -51,16 +51,6 @@ RUN cd /tmp && \
     sed '9,${/^\(kernel\|LICENSE\)/!d}' .manifest > /usr/src/nvidia-$DRIVER_VERSION/.manifest && \
     rm -rf /tmp/*
 
-COPY nvidia-driver /usr/local/bin
-
-WORKDIR /usr/src/nvidia-$DRIVER_VERSION
-
-ARG PUBLIC_KEY=empty
-COPY ${PUBLIC_KEY} kernel/pubkey.x509
-
-ARG PRIVATE_KEY
-ARG KERNEL_VERSION=generic,generic-hwe-16.04
-
 # Compile the kernel modules and generate precompiled packages for use by the nvidia-installer.
 RUN apt-get update && \
     for version in $(echo $KERNEL_VERSION | tr ',' ' '); do \
