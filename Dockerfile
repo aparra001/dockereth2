@@ -10,11 +10,6 @@ ADD \
 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub \
 .
 
-RUN apt-get update \
-    && apt-get -y install software-properties-common \
-    && apt-get update \
-    && apt-get install -y git cmake build-essential
-    
 RUN \
 mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600 \
 && apt-get update \
@@ -22,9 +17,12 @@ mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600 \
 && apt-key add 7fa2af80.pub \
 && add-apt-repository "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/ /" \
 && apt-get update \
-&& DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install cuda-runtime-10-2 \
-&& rm -rf /var/lib/apt/lists/* \
 
+RUN apt-get update \
+    && apt-get -y install software-properties-common \
+    && apt-get update \
+    && apt-get install -y git cmake build-essential
+    
 # Git repo set up
 RUN git clone https://github.com/ethereum-mining/ethminer.git; \
     cd ethminer; \
