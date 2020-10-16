@@ -3,23 +3,21 @@ FROM nvidia/driver:440.64.00-1.0.0-4.15.0-91-ubuntu18.04
 WORKDIR /
 
 ADD \
-https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-ubuntu1804.pin \
+https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-ubuntu1604.pin \
 .
 
 ADD \
-https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub \
+https://developer.download.nvidia.com/compute/cuda/10.0/secure/Prod/local_installers/cuda-repo-ubuntu1604-10-0-local-10.0.130-410.48_1.0-1_amd64.deb \
 .
 
 # Package and dependency setup
 RUN \
-mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600 \
-&& apt-get update \
-&& apt-get -y --no-install-recommends install gnupg2 software-properties-common \
-&& apt-key add 7fa2af80.pub \
-&& add-apt-repository "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/ /" \
-&& apt-get update \
-&& DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install cuda-runtime-10-2 \
-&& rm -rf /var/lib/apt/lists/* \
+mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600
+&& dpkg -i cuda-repo-ubuntu1604-10-0-local-10.0.130-410.48_1.0-1_amd64.deb
+&& apt-key add /var/cuda-repo-10-0-local-10.0.130-410.48/7fa2af80.pub
+&& apt-get update
+&& apt-get -y install cuda
+&& apt-get install libcurl3 -y
 
 RUN apt-get update \
     && apt-get -y install software-properties-common \
