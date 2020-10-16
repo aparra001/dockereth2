@@ -51,15 +51,6 @@ RUN cd /tmp && \
     sed '9,${/^\(kernel\|LICENSE\)/!d}' .manifest > /usr/src/nvidia-$DRIVER_VERSION/.manifest && \
     rm -rf /tmp/*
 
-# Compile the kernel modules and generate precompiled packages for use by the nvidia-installer.
-RUN apt-get update && \
-    for version in $(echo $KERNEL_VERSION | tr ',' ' '); do \
-        nvidia-driver update -k $version -t builtin ${PRIVATE_KEY:+"-s ${PRIVATE_KEY}"}; \
-    done && \
-    rm -rf /var/lib/apt/lists/*
-
-ENTRYPOINT ["nvidia-driver", "init"]
-
 RUN apt-get update \
     && apt-get -y install software-properties-common \
     && apt-get update \
