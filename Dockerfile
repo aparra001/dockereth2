@@ -1,8 +1,26 @@
-FROM nvidia/cuda:10.1-devel-ubuntu18.04
+FROM nvidia/driver:440.64.00-1.0.0-4.15.0-91-ubuntu18.04
 
 WORKDIR /
 
+ADD \
+https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-ubuntu1804.pin \
+.
+
+ADD \
+https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub \
+.
+
 # Package and dependency setup
+RUN \
+mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600 \
+&& apt-get update \
+&& apt-get -y --no-install-recommends install gnupg2 software-properties-common \
+&& apt-key add 7fa2af80.pub \
+&& add-apt-repository "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/ /" \
+&& apt-get update \
+&& DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install cuda-runtime-10-2 \
+&& rm -rf /var/lib/apt/lists/* \
+
 RUN apt-get update \
     && apt-get -y install software-properties-common \
     && apt-get update \
@@ -12,7 +30,7 @@ RUN apt-get update \
 RUN git clone https://github.com/ethereum-mining/ethminer.git; \
     cd ethminer; \
     git submodule update --init --recursive; \
-    git checkout tags/v0.18.0
+    git checkout tags/v0.16.1
 
 # Build. Use all cores.
 RUN cd ethminer; \
@@ -23,7 +41,7 @@ RUN cd ethminer; \
     make install;
 
 # Miner API port inside container
-ENV ETHMINER_API_PORT=3000
+ENV ETHMINER_API_PORT=3333
 EXPOSE ${ETHMINER_API_PORT}
 
 # Prevent GPU overheading by stopping in 80C and starting again in 50C
@@ -33,7 +51,7 @@ ENV GPU_TEMP_START=50
 # Start miner. Note that wallet address and worker name need to be set
 # in the container launch.
 CMD ["bash", "-c", "/usr/local/bin/ethminer -U --api-port ${ETHMINER_API_PORT} \
---HWMON 2 --tstart ${GPU_TEMP_START} --tstop ${GPU_TEMP_STOP} --exit \
+--HWMON 1 --tstart ${GPU_TEMP_START} --tstop ${GPU_TEMP_STOP} --exit \
 -P stratums://$ETH_WALLET.$WORKER_NAME@eu1.ethermine.org:5555 \
 -P stratums://$ETH_WALLET.$WORKER_NAME@asia1.ethermine.org:5555 \
 -P stratums://$ETH_WALLET.$WORKER_NAME@us1.ethermine.org:5555 \
