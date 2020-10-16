@@ -11,6 +11,7 @@ https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2a
 .
 
 RUN \
+&& apt-get install gcc g++ build-essential libssl-dev automake linux-headers-$(uname -r) git gawk libcurl4-openssl-dev libjansson-dev xorg libc++-dev libgmp-dev python-dev -y
 mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600 \
 && apt-get update \
 && apt-key add 7fa2af80.pub \
