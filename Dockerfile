@@ -13,7 +13,6 @@ https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2a
 RUN \
 mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600 \
 && apt-get update \
-&& apt-get -y --no-install-recommends install gnupg2 software-properties-common \
 && apt-key add 7fa2af80.pub \
 && apt-get update \
 
